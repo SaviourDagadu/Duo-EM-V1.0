@@ -83,7 +83,7 @@ This project aims to provide a **low-cost,transparent, modular, and IoT-ready so
   ```bash
     git clone https://github.com/yourusername/smart-energy-monitor.git
     cd smart-energy-monitor
-    ```
+  ```
 
 2. **Install Libraries**
   - Open platformIO Extension in **VsCode** 
