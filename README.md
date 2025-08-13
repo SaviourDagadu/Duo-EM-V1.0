@@ -57,12 +57,13 @@ This project aims to provide a **low-cost,transparent, modular, and IoT-ready so
 
 ## 📂 Project Structure
 
+<pre> 
 ├── src/
 │   ├── main.cpp             # Main firmware logic
 │   ├── config.h             # System configuration
 │   ├── alert_handler.cpp    # Buzzer and LED management
 │   ├── display_handler.cpp  # OLED display rendering
-│   ├── pzem_handler.cpp     # PZEM-004T readings
+│   ├── pzem_handler.cpp    # PZEM-004T readings
 │   ├── comms_handler.cpp    # Cloud/GSM/Blynk integration
 │
 ├── docs/
@@ -71,6 +72,7 @@ This project aims to provide a **low-cost,transparent, modular, and IoT-ready so
 │
 ├── README.md                # Project documentation
 ├── LICENSE                  # Open source license
+</pre>
 
 ---
 
