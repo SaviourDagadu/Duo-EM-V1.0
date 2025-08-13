@@ -58,20 +58,40 @@ This project aims to provide a **low-cost,transparent, modular, and IoT-ready so
 ## 📂 Project Structure
 
 <pre> 
+Duo-EM-v1.0/
+│
+├── platformio.ini
+│
+├── include/
+│   └── config.h                 # Global configuration & pin definitions
+│
+├── lib/
+│   ├── GSMModule/
+│   │   ├── GSMModule.h           # Class declaration for GSM handling
+│   │   └── GSMModule.cpp         # Class implementation
+│   │
+│   ├── DisplayHandler/
+│   │   ├── DisplayHandler.h      # LCD handling declarations
+│   │   └── DisplayHandler.cpp    # Implementation
+│   │
+│   ├── SensorHandler/
+│   │   ├── SensorHandler.h       # Sensor reading declarations
+│   │   └── SensorHandler.cpp     # Implementation
+│   │
+│   ├── AlertHandler/
+│   │   ├── AlertHandler.h        # LED & buzzer alerts
+│   │   └── AlertHandler.cpp
+│
 ├── src/
-│   ├── main.cpp             # Main firmware logic
-│   ├── config.h             # System configuration
-│   ├── alert_handler.cpp    # Buzzer and LED management
-│   ├── display_handler.cpp  # OLED display rendering
-│   ├── pzem_handler.cpp    # PZEM-004T readings
-│   ├── comms_handler.cpp    # Cloud/GSM/Blynk integration
+│   ├── main.cpp                  # Main orchestration code
 │
-├── docs/
-│   ├── wiring_diagram.png   # Circuit wiring reference
-│   ├── protocol_notes.md    # Modbus communication notes
 │
-├── README.md                # Project documentation
-├── LICENSE                  # Open source license
+└── test/                          # Test programs
+    ├── test_gsm_main.cpp          # GSM module test (virtual UART)
+    ├── test_display_main.cpp      # Display module test
+    ├── test_alert_main.cpp        # Alert module test
+    ├── test_sensor_main.cpp       # Sensor reading test
+
 </pre>
 
 ---
