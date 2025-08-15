@@ -76,18 +76,32 @@
 #define DEBUG_MODE             true
 
 // -----------------------------
-// UART & PZEM Settings
+// UART Configuration
+// -----------------------------
+#define UART_BUFFER_SIZE       256      // UART receive buffer size
+
+// Hardware UART Port Selection
+#define USE_UART2_FOR_GSM      true     // Recommended for SIM800L reliability
+
+// -----------------------------
+// PZEM Settings (SoftwareSerial)
 // -----------------------------
 // Tenant A
 #define PZEM_A_TX_PIN          26
 #define PZEM_A_RX_PIN          27
+#define PZEM_A_SOFTWARE_SERIAL true    // Using SoftwareSerial
 
 // Tenant B
 #define PZEM_B_TX_PIN          14
 #define PZEM_B_RX_PIN          12
+#define PZEM_B_SOFTWARE_SERIAL true    // Using SoftwareSerial
 
 #define PZEM_UART_BAUDRATE     9600
+#define PZEM_ADDRESS_A         0x02  // Modbus address for PZEM device A
+#define PZEM_ADDRESS_B         0x01  // Modbus address for PZEM device B
 #define PZEM_UART_CONFIG       SERIAL_8N1
+#define PZEM_RESPONSE_TIMEOUT  1000    // ms
+#define PZEM_RETRY_COUNT       3       // Number of retries for PZEM communication
 
 // -----------------------------
 // GSM SIM800L Settings
@@ -96,6 +110,7 @@
 #define GSM_RX_PIN             17
 #define GSM_UART_BAUDRATE      9600
 #define GSM_UART_CONFIG        SERIAL_8N1
+#define GSM_UART_PORT          Serial2  // Using hardware UART2
 
 // -----------------------------
 // I2C Settings (LCD + RTC)
@@ -109,6 +124,7 @@
 #define LCD_ROWS               4
 #define RTC_I2C_ADDR           0x68
 
+
 // -----------------------------
 // Indicators & Alerts
 // -----------------------------
@@ -116,6 +132,7 @@
 #define LED_GREEN_PIN          19
 #define LED_RED_PIN            23
 #define LED_BLUE_PIN           25
+#define LED_BLINK_INTERVAL     500     // ms
 
 // -----------------------------
 // Energy & Cost Settings
@@ -123,29 +140,31 @@
 #define ENERGY_RATE_GHS        1.60f
 #define DAILY_ENERGY_THRESHOLD 30.0f
 #define DAILY_COST_THRESHOLD   48.0f
+#define PEAK_POWER_THRESHOLD   5000.0f // Watts
 
 // -----------------------------
 // Timing Intervals (ms)
 // -----------------------------
 #define SENSOR_READ_INTERVAL   1000
-#define DISPLAY_UPDATE_INTERVAL 2000
+#define DISPLAY_UPDATE_INTERVAL 1000
 #define DATA_LOG_INTERVAL      60000
 #define SMS_CHECK_INTERVAL     300000
 #define API_UPDATE_INTERVAL    300000
 #define DISPLAY_PAGE_DURATION  5000
+#define WATCHDOG_TIMEOUT       60000   // System watchdog timeout
 
 // -----------------------------
 // Networking / Cloud
 // -----------------------------
-#define THINGSPEAK_API_KEY     "YOUR_THINGSPEAK_WRITE_API_KEY"
+#define THINGSPEAK_API_KEY     "F4SQUSOSHFE7K3I7&field1=0"
 #define THINGSPEAK_CHANNEL_ID  "YOUR_CHANNEL_ID"
 
-#define WIFI_SSID              "YOUR_WIFI_SSID"
-#define WIFI_PASSWORD          "YOUR_WIFI_PASSWORD"
+#define WIFI_SSID              "Bixyl_Lab"
+#define WIFI_PASSWORD          "bixyldell95"
 
 static const char* SMS_RECIPIENTS[] = {
-    "+233XXXXXXXXX",
-    "+233YYYYYYYYY"
+    "+233248919044",
+    "+233594101456"
 };
 #define SMS_RECIPIENT_COUNT    (sizeof(SMS_RECIPIENTS) / sizeof(SMS_RECIPIENTS[0]))
 
