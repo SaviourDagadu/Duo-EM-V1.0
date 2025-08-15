@@ -76,24 +76,82 @@ void LCDInterface::showSystemMessage(const String& message, unsigned long durati
     messageEndTime = millis() + duration;
     
     lcd.clear();
-    lcd.setCursor(0, 1);
-
-    // Split long messages across two lines
+    
+    // Display centered "System" header
+    lcd.setCursor((16 - 6)/2, 0);  // Center "System" (6 chars)
+    lcd.print("System");
+    
+    // Handle the main message content
     if (message.length() > 16) {
-        lcd.setCursor(0, 2);
-        lcd.print(message.substring(0, 16));
-        lcd.setCursor(0, 3);
-        lcd.print(message.substring(16));
+        // Split long messages across lines 1 and 2
+        int splitPos = message.lastIndexOf(' ', 16);
+        if (splitPos == -1) splitPos = 16;
+        
+        lcd.setCursor(0, 1);
+        lcd.print(message.substring(0, splitPos));
+        
+        // Use line 2 for remainder, line 3 if needed
+        String remainder = message.substring(splitPos + 1);
+        if (remainder.length() > 16) {
+            lcd.setCursor(0, 2);
+            lcd.print(remainder.substring(0, 16));
+            lcd.setCursor(0, 3);
+            lcd.print(remainder.substring(16));
+        } else {
+            lcd.setCursor(0, 2);
+            lcd.print(remainder);
+        }
     } else {
-        lcd.setCursor(0, 2);
+        // Center short messages on line 1
+        lcd.setCursor((16 - message.length())/2, 1);
         lcd.print(message);
     }
 }
 
 void LCDInterface::showAlert(const String& message) {
-    showSystemMessage(message, 5000); // Alerts show for 5 seconds
+    lcd.clear();
     
-    // Make the alert more visible
+    // Error code to message mapping
+    const String errorMessages[] = {
+        "E1: UNIT A Disconnected",
+        "E2: UNIT B Disconnected",
+        "Unknown error"
+    };
+
+    String displayMsg = message;
+    
+    // Check if message is an error code
+    if (message.startsWith("E")) {
+        int errorCode = message.substring(1).toInt();
+        if (errorCode >= 1 && errorCode <= 2) {
+            displayMsg = errorMessages[errorCode-1];
+        } else {
+            displayMsg = errorMessages[2]; // Unknown error
+        }
+    }
+
+    // Display alert header (centered)
+    lcd.setCursor(3, 0);
+    lcd.print("ALERT");
+    
+    // Split message into two lines if needed
+    if (displayMsg.length() > 16) {
+        int splitPos = displayMsg.lastIndexOf(' ', 16);
+        if (splitPos == -1) splitPos = 16;
+        
+        lcd.setCursor(0, 1);
+        lcd.print(displayMsg.substring(0, splitPos));
+        
+        lcd.setCursor(0, 2);
+        lcd.print(displayMsg.substring(splitPos + 1));
+    } else {
+        // Center short messages
+        int padding = (16 - displayMsg.length()) / 2;
+        lcd.setCursor(padding, 1);
+        lcd.print(displayMsg);
+    }
+    
+    // Visual alert
     for (int i = 0; i < 3; i++) {
         lcd.noBacklight();
         delay(200);

@@ -181,10 +181,10 @@ PZEMReading SensorHandler::readTenant(SoftwareSerial &serial, uint8_t address,
         delay(50);
     }
     
-    if(!success) {
-        status.last_error = "Read failed for address: " + String(address, HEX);
-        return emptyReading(energy);
-    }
+if(!success) {
+    status.last_error = "E" + String(address); // "E1" or "E2"
+    return emptyReading(energy);
+};
     
     // Energy accumulation
     unsigned long now = millis();

@@ -40,9 +40,10 @@ void setup() {
   alertHandler.begin();
 
   // Show startup message
-  lcdInterface.showSystemMessage("System Initializing ...",2000);
-  delay(2000); // Allow splash screen to display
-
+  lcdInterface.showSystemMessage("Initializing ...",2000);
+  for (int i = 0; i < 2; i++){
+    
+  }
   // Initialize GSM module (non-blocking)
   if (DEBUG_MODE) {
     Serial.println("Initializing GSM module...");
@@ -82,23 +83,46 @@ void loop() {
     // Update display
     lcdInterface.updateDisplay(energyData, sensorStatus);
 
-    // Check for system alerts
-    if (!sensorStatus.tenant_a_ok || !sensorStatus.tenant_b_ok) {
-      String errorMsg = "Sensor error: " + sensorStatus.last_error;
-      if (DEBUG_MODE) Serial.println(errorMsg);
-      
-      alertHandler.triggerSystemAlert();
-      lcdInterface.showAlert(errorMsg);
-      
-      if (!systemAlertSent && gsmModule.getStatus().smsReady) {
-        if (gsmModule.sendSystemAlert(errorMsg)) {
-          systemAlertSent = true;
-        }
-      }
-    } else {
-      alertHandler.clearSystemAlert();
-      systemAlertSent = false;
+// Check for system alerts
+if (!sensorStatus.tenant_a_ok || !sensorStatus.tenant_b_ok) {
+    // Determine which sensor failed
+    String sensorName = !sensorStatus.tenant_a_ok ? "A" : "B";
+    
+    // For serial debugging - show raw code
+    if (DEBUG_MODE) {
+        Serial.print("Sensor ");
+        Serial.print(sensorName);
+        Serial.print(" error: ");
+        Serial.println(sensorStatus.last_error);
     }
+    
+    // Trigger visual/audio alerts
+    alertHandler.triggerSystemAlert();
+    lcdInterface.showAlert(sensorStatus.last_error); // Pass raw code to LCD
+    
+    // Send detailed SMS if ready
+    if (!systemAlertSent && gsmModule.getStatus().smsReady) {
+        String smsMsg = "UNIT " + sensorName + " error: ";
+        
+        // Add description for SMS
+        if (sensorStatus.last_error == "E1") {
+            smsMsg += "UNIT A communication failure";
+        } 
+        else if (sensorStatus.last_error == "E2") {
+            smsMsg += "UNIT B communication failure";
+        }
+        else {
+            smsMsg += sensorStatus.last_error; // fallback
+        }
+        
+        if (gsmModule.sendSystemAlert(smsMsg)) {
+            systemAlertSent = true;
+        }
+    }
+} else {
+    alertHandler.clearSystemAlert();
+    systemAlertSent = false;
+}
 
     // Check for energy threshold alerts
     checkEnergyThresholds(energyData);
