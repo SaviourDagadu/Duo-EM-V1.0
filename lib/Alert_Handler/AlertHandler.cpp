@@ -58,6 +58,7 @@ void AlertHandler::triggerSystemAlert() {
 void AlertHandler::clearSystemAlert() {
     systemAlertActive = false;
     digitalWrite(BUZZER_PIN, LOW);
+    digitalWrite(LED_GREEN_PIN,HIGH);
 }
 
 void AlertHandler::update() {
@@ -76,6 +77,8 @@ void AlertHandler::update() {
             // Toggle buzzer for any active alert
             if (alertActive || systemAlertActive) {
                 digitalWrite(BUZZER_PIN, !digitalRead(BUZZER_PIN));
+                digitalWrite(LED_RED_PIN, !digitalRead(LED_RED_PIN));
+                digitalWrite(LED_GREEN_PIN,LOW);
             }
         }
     }
