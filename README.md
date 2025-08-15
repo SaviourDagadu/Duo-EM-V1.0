@@ -103,7 +103,7 @@ Duo-EM-v1.0/
   ```bash
     git clone https://github.com/yourusername/smart-energy-monitor.git
     cd smart-energy-monitor
-    ```
+  ```
 
 2. **Install Libraries**
   - Open platformIO Extension in **VsCode** 
