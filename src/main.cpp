@@ -24,11 +24,11 @@ bool costAlertSent = false;
 bool systemAlertSent = false;
 
 // Function prototypes
-
 void updateAPI();
 void checkForIncomingSMS();
 void logDataToCloud();
 void checkEnergyThresholds(const PZEMResult& energyData);
+void printInstructions();
 
 void setup() {
   Serial.begin(115200);
@@ -67,10 +67,36 @@ void setup() {
   
   // Set initial alert states
   alertHandler.setSystemStatus(sensorStatus.tenant_a_ok && sensorStatus.tenant_b_ok);
+
+  printInstructions();
 }
 
 void loop() {
   unsigned long currentTime = millis();
+
+    // CHECK FOR SERIAL COMMANDS FIRST
+  if (Serial.available()) {
+    String command = Serial.readStringUntil('\n');
+    command.trim(); // Remove any whitespace
+    
+    if (command.equalsIgnoreCase("test") || command.equalsIgnoreCase("diag")) {
+      Serial.println("Running diagnostics...");
+      sensorHandler.runDiagnostics();
+    }
+    else if (command.equalsIgnoreCase("help")) {
+      Serial.println("Available commands:");
+      Serial.println("- 'test' or 'diag': Run sensor diagnostics");
+      Serial.println("- 'discover': Discover PZEM addresses");
+      Serial.println("- 'help': Show this help");
+    }
+    else if (command.equalsIgnoreCase("discover")) {
+      Serial.println("Discovering PZEM devices...");
+      uint8_t foundA = sensorHandler.discoverAddresses(1); // Tenant A
+      uint8_t foundB = sensorHandler.discoverAddresses(2); // Tenant B
+      Serial.print("Total devices found: ");
+      Serial.println(foundA + foundB);
+    }
+  }
 
   // Handle sensor readings at fixed interval
   if (currentTime - lastSensorReadTime >= SENSOR_READ_INTERVAL) {
@@ -132,7 +158,7 @@ if (!sensorStatus.tenant_a_ok || !sensorStatus.tenant_b_ok) {
   }
 
   // Daily data reset check (once per day)
-  if (currentTime - lastDailyResetCheck >= 86400000) { // 24 hours
+  if (currentTime - lastDailyResetCheck >=86400000) { //  86400000 24 hours
     lastDailyResetCheck = currentTime;
     sensorHandler.resetDailyCounters();
     energyAlertSent = false;
@@ -259,4 +285,16 @@ void checkForIncomingSMS() {
 void updateAPI() {
   // Placeholder for any additional API updates
   if (DEBUG_MODE) Serial.println("Performing API updates...");
+}
+
+// ADD THIS HELPER FUNCTION TO main.cpp (before setup())
+void printInstructions() {
+  Serial.println("\n" + String("=").substring(0,50));
+  Serial.println("🔧 PZEM DIAGNOSTIC SYSTEM READY");
+  Serial.println(String("=").substring(0,50));
+  Serial.println("Available Serial Commands:");
+  Serial.println("• Type 'test' - Run full diagnostics");
+  Serial.println("• Type 'help' - Show available commands");
+  Serial.println("• Type 'discover' - Find PZEM devices");
+  Serial.println(String("=").substring(0,50) + "\n");
 }

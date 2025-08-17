@@ -121,38 +121,84 @@ bool SensorHandler::parseResponse(uint8_t *response, uint8_t len, uint8_t addres
         return false;
     }
     
-   // Parse voltage (register 0x0000)
-    result.voltage =((uint32_t)response[3] << 8 | // Raw voltage in 0.1V
-                     (uint32_t)response[4])/10.0;
+    // Add debug output to see raw bytes
+    // if(DEBUG_MODE) {
+    //     Serial.print("Raw response bytes: ");
+    //     for(int i = 3; i <= 20; i++) {
+    //         if(response[i] < 0x10) Serial.print("0");
+    //         Serial.print(response[i], HEX);
+    //         Serial.print(" ");
+    //     }
+    //     Serial.println();
+    // }
+    
+    // Based on OFFICIAL PZEM-004T Manual:
+    // All values use BIG-ENDIAN 16-bit words
+    // 32-bit values are stored as [HIGH_WORD][LOW_WORD]
+    
+    // Parse voltage (register 0x0000) - 16-bit BIG-ENDIAN in 0.1V units
+    uint16_t voltageRaw = ((uint16_t)response[3] << 8) | response[4];
+    result.voltage = voltageRaw / 10.0f;
 
-    // Parse current (registers 0x0001-0x0002)
-    uint32_t currentRaw = ((uint32_t)response[5] << 8 | // Raw current in 0.001A
-                            (uint32_t)response[6] |
-                            (uint32_t)response[7] << 24 |
-                            (uint32_t)response[8] << 16) / 1000.0;
+    // Parse current (registers 0x0001-0x0002) - 32-bit as [HIGH_WORD][LOW_WORD] in 0.001A units
+    // LOW word (0x0001): bytes 5,6    HIGH word (0x0002): bytes 7,8
+    uint16_t currentLow = ((uint16_t)response[5] << 8) | response[6];
+    uint16_t currentHigh = ((uint16_t)response[7] << 8) | response[8];
+    uint32_t currentRaw = ((uint32_t)currentHigh << 16) | currentLow;
+    result.current = currentRaw / 1000.0f;
     
-    // Parse power (registers 0x0003-0x0004)
-    uint32_t powerRaw =   ((uint32_t)response[9] << 8 | // Raw power in 0.1W
-                           (uint32_t)response[10] |
-                           (uint32_t)response[11] << 24 |
-                           (uint32_t)response[12] << 16) / 10.0;
-
+    // Parse power (registers 0x0003-0x0004) - 32-bit as [HIGH_WORD][LOW_WORD] in 0.1W units
+    // LOW word (0x0003): bytes 9,10   HIGH word (0x0004): bytes 11,12
+    uint16_t powerLow = ((uint16_t)response[9] << 8) | response[10];
+    uint16_t powerHigh = ((uint16_t)response[11] << 8) | response[12];
+    uint32_t powerRaw = ((uint32_t)powerHigh << 16) | powerLow;
+    result.power = powerRaw / 10.0f;
     
-    // Parse energy (registers 0x0005-0x0006)
-    uint32_t energyRaw = ((uint32_t)response[13] << 8 | // Raw Energy in 1Wh
-                          (uint32_t)response[14] |
-                          (uint32_t)response[15] << 24 |
-                          (uint32_t)response[16] << 16) / 1000.0;
+    // Parse energy (registers 0x0005-0x0006) - 32-bit as [HIGH_WORD][LOW_WORD] in 1Wh units
+    // LOW word (0x0005): bytes 13,14  HIGH word (0x0006): bytes 15,16
+    uint16_t energyLow = ((uint16_t)response[13] << 8) | response[14];
+    uint16_t energyHigh = ((uint16_t)response[15] << 8) | response[16];
+    uint32_t energyRaw = ((uint32_t)energyHigh << 16) | energyLow;
+    result.energy_wh_raw = energyRaw;
+    result.energy_kwh = energyRaw / 1000.0f;
     
-    // Parse frequency (register 0x0007)
-    result.frequency = ((uint32_t)response[17] << 8 | // Raw Frequency in 0.1Hz
-                        (uint32_t)response[18]) / 10.0;
+    // Parse frequency (register 0x0007) - 16-bit BIG-ENDIAN in 0.1Hz units
+    uint16_t frequencyRaw = ((uint16_t)response[17] << 8) | response[18];
+    result.frequency = frequencyRaw / 10.0f;
     
-    // Parse power factor (register 0x0008)
-    result.power_factor = ((uint32_t)response[19] << 8 | // Raw pf in 0.01
-                           (uint32_t)response[20])/100.0;
-
+    // Parse power factor (register 0x0008) - 16-bit BIG-ENDIAN in 0.01 units
+    uint16_t pfRaw = ((uint16_t)response[19] << 8) | response[20];
+    result.power_factor = pfRaw / 100.0f;
     result.power_factor = constrain(result.power_factor, 0.0f, 1.0f);
+    
+    // Add detailed debug output
+    // if(DEBUG_MODE) {
+    //     Serial.println("Parsed values:");
+    //     Serial.print("Voltage: 0x"); Serial.print(voltageRaw, HEX); 
+    //     Serial.print(" = "); Serial.print(result.voltage); Serial.println("V");
+        
+    //     Serial.print("Current: LOW=0x"); Serial.print(currentLow, HEX); 
+    //     Serial.print(" HIGH=0x"); Serial.print(currentHigh, HEX);
+    //     Serial.print(" TOTAL=0x"); Serial.print(currentRaw, HEX);
+    //     Serial.print(" = "); Serial.print(result.current, 3); Serial.println("A");
+        
+    //     Serial.print("Power: LOW=0x"); Serial.print(powerLow, HEX); 
+    //     Serial.print(" HIGH=0x"); Serial.print(powerHigh, HEX);
+    //     Serial.print(" TOTAL=0x"); Serial.print(powerRaw, HEX);
+    //     Serial.print(" = "); Serial.print(result.power); Serial.println("W");
+        
+    //     Serial.print("Energy: LOW=0x"); Serial.print(energyLow, HEX); 
+    //     Serial.print(" HIGH=0x"); Serial.print(energyHigh, HEX);
+    //     Serial.print(" TOTAL=0x"); Serial.print(energyRaw, HEX);
+    //     Serial.print(" = "); Serial.print(result.energy_kwh, 3); Serial.println("kWh");
+        
+    //     Serial.print("Frequency: 0x"); Serial.print(frequencyRaw, HEX); 
+    //     Serial.print(" = "); Serial.print(result.frequency); Serial.println("Hz");
+        
+    //     Serial.print("PF: 0x"); Serial.print(pfRaw, HEX); 
+    //     Serial.print(" = "); Serial.print(result.power_factor, 2); Serial.println("");
+    //     Serial.println("---");
+    // }
     
     result.timestamp = millis();
     result.ok = true;
@@ -365,4 +411,57 @@ uint8_t SensorHandler::discoverAddresses(uint8_t tenant) {
     Serial.print(foundDevices);
     Serial.println(" devices.");
     return foundDevices;
+}
+
+//  Diagnotics Function for both sensors
+void SensorHandler::runDiagnostics() {
+    Serial.println("=== PZEM DIAGNOSTIC MODE ===");
+    
+    // Test both sensors
+    PZEMResult result = readAll();
+    
+    Serial.println("\n--- SENSOR A ---");
+    Serial.print("Status: "); Serial.println(result.tenant_a.ok ? "OK" : "FAILED");
+    Serial.print("Voltage: "); Serial.print(result.tenant_a.voltage); Serial.println("V");
+    Serial.print("Current: "); Serial.print(result.tenant_a.current, 3); Serial.println("A");
+    Serial.print("Power: "); Serial.print(result.tenant_a.power); Serial.println("W");
+    Serial.print("PF: "); Serial.println(result.tenant_a.power_factor, 2);
+    
+    Serial.println("\n--- SENSOR B ---");
+    Serial.print("Status: "); Serial.println(result.tenant_b.ok ? "OK" : "FAILED");
+    Serial.print("Voltage: "); Serial.print(result.tenant_b.voltage); Serial.println("V");
+    Serial.print("Current: "); Serial.print(result.tenant_b.current, 3); Serial.println("A");
+    Serial.print("Power: "); Serial.print(result.tenant_b.power); Serial.println("W");
+    Serial.print("PF: "); Serial.println(result.tenant_b.power_factor, 2);
+    
+    // Diagnostic conclusions
+    Serial.println("\n--- DIAGNOSTICS ---");
+    
+    if(result.tenant_a.voltage > 200 && result.tenant_a.voltage < 250) {
+        Serial.println("✓ Sensor A: Voltage normal - PZEM connected to mains");
+    } else {
+        Serial.println("✗ Sensor A: Voltage abnormal - Check mains connection");
+    }
+    
+    if(result.tenant_a.current < 0.1) {
+        Serial.println("⚠ Sensor A: Very low current - Check CT clamp installation");
+        Serial.println("  - Ensure CT is clamped around ONLY the live wire");
+        Serial.println("  - Check CT is properly closed");
+        Serial.println("  - Try turning on a load (light, heater, etc.)");
+    }
+    
+    if(result.tenant_b.voltage > 200 && result.tenant_b.voltage < 250) {
+        Serial.println("✓ Sensor B: Voltage normal - PZEM connected to mains");
+    } else {
+        Serial.println("✗ Sensor B: Voltage abnormal - Check mains connection");
+    }
+    
+    if(result.tenant_b.current < 0.1) {
+        Serial.println("⚠ Sensor B: Very low current - Check CT clamp installation");
+        Serial.println("  - Ensure CT is clamped around ONLY the live wire");
+        Serial.println("  - Check CT is properly closed");
+        Serial.println("  - Try turning on a load (light, heater, etc.)");
+    }
+    
+    Serial.println("\n=== END DIAGNOSTICS ===\n");
 }

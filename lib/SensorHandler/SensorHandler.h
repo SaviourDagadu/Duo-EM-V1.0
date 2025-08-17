@@ -45,7 +45,7 @@ public:
     void init();
     PZEMResult readAll();
     void resetDailyCounters();
-    
+    void runDiagnostics();
     StatusResult getStatus();
 
     // Address management
