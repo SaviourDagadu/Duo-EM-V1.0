@@ -66,7 +66,7 @@ void AlertHandler::update() {
     
     // Handle blinking for active alerts
     if (alertActive || systemAlertActive) {
-        if (currentTime - lastBlinkTime >= LED_BLINK_INTERVAL) {
+        if (currentTime - lastBlinkTime >= ALERT_BLINK_FAST) {
             lastBlinkTime = currentTime;
             
             // Toggle red LED for energy alerts
@@ -85,7 +85,7 @@ void AlertHandler::update() {
     
     // Blue LED behavior during communication
     if (communicationActive && !alertActive && !systemAlertActive) {
-        if (currentTime - lastBlinkTime >= LED_BLINK_INTERVAL/2) {
+        if (currentTime - lastBlinkTime >= ALERT_BLINK_SLOW) {
             lastBlinkTime = currentTime;
             digitalWrite(LED_BLUE_PIN, !digitalRead(LED_BLUE_PIN));
         }

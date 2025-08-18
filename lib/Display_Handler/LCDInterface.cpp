@@ -16,16 +16,28 @@ void LCDInterface::begin() {
 }
 
 String LCDInterface::formatFloat(float value, int precision) {
+    // Handle special cases
+    if (isnan(value) || isinf(value)) {
+        return "---";
+    }
+    
     String result = String(value, precision);
-    // Remove trailing zeros and possible . if no decimals left
+    
+    // Trim trailing zeros after decimal point
     if (result.indexOf('.') != -1) {
-        result.replace("0", " ");
-        result.trim();
-        result.replace(" ", "0");
+        while (result.endsWith("0") && result.indexOf('.') != result.length() - 2) {
+            result.remove(result.length() - 1);
+        }
         if (result.endsWith(".")) {
             result.remove(result.length() - 1);
         }
     }
+    
+    // Ensure we don't exceed reasonable display width for each field
+    if (result.length() > 4) {
+        result = result.substring(0, 4);
+    }
+    
     return result;
 }
 
@@ -44,7 +56,7 @@ void LCDInterface::updateDisplay(const PZEMResult& energyData, const StatusResul
     }
     
     // Check if it's time to update the display values
-    if (currentTime - lastUpdateTime < DISPLAY_UPDATE_INTERVAL) {
+    if (currentTime - lastUpdateTime < DISPLAY_PAGE_DURATION) {
         return;
     }
     
@@ -273,7 +285,7 @@ void LCDInterface::displayPage3(const PZEMResult& data) {
     
     // Line 1: Total Power (centered)
     lcd.setCursor(0, 1);
-    lcd.print(" Total Power: ");
+    lcd.print(" Power: ");
     lcd.print(formatFloat(data.summary.total_power, 1));
     lcd.print("W ");
     
@@ -364,4 +376,15 @@ void LCDInterface::displayPage4(const StatusResult& status) {
 void LCDInterface::clearLine(int line) {
     lcd.setCursor(0, line);
     lcd.print("                "); // 16 spaces
+}
+
+// LCD Screen Light Mode
+void LCDInterface::backLightMode(){
+
+     if (millis() >= LCD_BACKLIGHT_TIMEOUT){
+        lcd.noBacklight();
+     }
+     else{
+        lcd.backlight();
+     }
 }

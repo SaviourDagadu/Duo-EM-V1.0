@@ -57,7 +57,7 @@ This project aims to provide a **low-cost,transparent, modular, and IoT-ready so
 
 ## 📂 Project Structure
 
-<pre> 
+<pre>
 Duo-EM-v1.0/
 │
 ├── platformio.ini
@@ -106,37 +106,81 @@ Duo-EM-v1.0/
   ```
 
 2. **Install Libraries**
-  - Open platformIO Extension in **VsCode** 
-  - Go to Sketch → Include Library → Manage Libraries
-  - Install required dependencies
+
+  -- Open platformIO Extension in **VsCode**
+  -- Go to Sketch → Include Library → Manage Libraries
+  -- Install required dependencies
 
 3. Configure Settings
-  - Edit **config.h** to match your hardware pins and preferences.
-  - Upload Firmware
-  - Select ESP32 DevKit from Tools → Board
-  - Upload via USB
+  -- Edit **config.h** to match your hardware pins and preferences.
+  -- Upload Firmware
+  -- Select ESP32 DevKit from Tools → Board
+  -- Upload via USB
 
 4. Connect Hardware
-  - Wire components as per the circuit diagram in /docs/wiring_diagram.png
+  -- Wire components as per the circuit diagram in /docs/wiring_diagram.png
   
+---
+
+## 📄  COMPREHENSIVE DIAGNOSTICS SYSTEM COMMANDS
+
+  GSM DIAGNOSTICS:
+  gsm_test      - Full GSM module test
+  gsm_status    - Show detailed GSM status
+  gsm_signal    - Check signal strength
+  gsm_network   - Show network information
+
+SMS TESTING:
+  sms_send **<number> <message>** - Send test SMS
+  sms_test_all  - Send test SMS to all recipients
+  sms_simulate <command> - Simulate user SMS command
+  sms_stats     - Show SMS statistics
+
+INTERNET TESTING:
+  gprs_test     - Test GPRS connection
+  gprs_status   - Show GPRS status
+  cloud_test    - Test cloud data upload
+  http_test <url> - Test HTTP request
+  thingspeak_test - Test ThingSpeak upload
+
+USER SIMULATION:
+  user_status   - Send status report to users
+  user_report   - Send daily report to users
+  user_help     - Show SMS commands for users
+  emergency_alert - Send emergency test alert
+
+SYSTEM DIAGNOSTICS:
+  status        - Complete system status
+  sensor_test   - Test PZEM sensors
+  threshold_test - Simulate threshold alerts
+  memory_info   - Show memory usage
+  uptime        - Show system uptime
+  full_diag     - Run complete diagnostics
+  reset_counters - Reset all statisticS
+
+BASIC COMMANDS:
+  test/diag     - Basic sensor diagnostics
+  discover      - Discover PZEM addresses
+  help          - Show this menu
+
+TIP: All commands are case-insensitive
+
 ---
 
 📜 License
 This project is licensed under the MIT License – see the LICENSE file for details.
 
 🤝 Contribution
-  - We welcome community contributions!
-  - Report issues via the GitHub Issues tab.
-  - Submit pull requests for bug fixes or feature additions.
-  - Improve documentation for better adoption.
+  -We welcome community contributions!
+  -Report issues via the GitHub Issues tab.
+  -Submit pull requests for bug fixes or feature additions.
+  -Improve documentation for better adoption.
 
 ---
+
 ## 📧 Contact Maintainer
 
 - **Name:** Saviour Dagadu – Embedded Hardware Designer  
 - **📍 Location:** Accra, Ghana  
 - **✉️ Email:** [senamdagadusaviour@gmail.com](mailto:senamdagadusaviour@gmail.com)  
 - **🔗 GitHub:** [SaviourDagadu](https://github.com/SaviourDagadu)
-
-
-
