@@ -248,7 +248,7 @@ if(!success) {
     // Update result with accumulated values
     result.energy_kwh = energy;
     result.daily_energy_kwh = dailyEnergy;
-    result.daily_cost = dailyEnergy * ENERGY_COST_PER_KWH;
+    result.daily_cost = dailyEnergy * ENERGY_RATE_GHS;
     
     return result;
 }
@@ -286,7 +286,7 @@ PZEMReading SensorHandler::mockRead() {
     result.energy_wh_raw = energyWh;
     result.energy_kwh = energyWh / 1000.0f;
     result.daily_energy_kwh = result.energy_kwh;
-    result.daily_cost = result.daily_energy_kwh * ENERGY_COST_PER_KWH;
+    result.daily_cost = result.daily_energy_kwh * ENERGY_RATE_GHS;
     result.frequency = 50.0f;
     result.power_factor = 0.95f;
     result.timestamp = millis();
@@ -298,9 +298,9 @@ PZEMReading SensorHandler::mockRead() {
 PZEMResult SensorHandler::readAll() {
     PZEMResult result;
     
-    result.tenant_a = readTenant(pzemA, PZEM_A_ADDRESS, lastReadingA, energyA, dailyEnergyA);
-    result.tenant_b = readTenant(pzemB, PZEM_B_ADDRESS, lastReadingB, energyB, dailyEnergyB);
-
+    result.tenant_a = readTenant(pzemA, PZEM_ADDRESS_A, lastReadingA, energyA, dailyEnergyA);
+    result.tenant_b = readTenant(pzemB, PZEM_ADDRESS_B, lastReadingB, energyB, dailyEnergyB);
+    
     // Update status
     status.tenant_a_ok = result.tenant_a.ok;
     status.tenant_b_ok = result.tenant_b.ok;
