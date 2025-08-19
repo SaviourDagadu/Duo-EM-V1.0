@@ -38,7 +38,7 @@ This project aims to provide a **low-cost, transparent, modular, and IoT-ready s
 
 ### Hardware Connections Diagram
 
-![HARDWARE WIRING DIAGRAM](img/diagram.jpg)
+![HARDWARE WIRING DIAGRAM](Img/diagram.jpg)
 *Figure 1: Complete hardware wiring setup for the project*
 
 ---
