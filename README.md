@@ -1,6 +1,8 @@
 # Dual-Tenant Energy Monitoring System
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Platform](https://img.shields.io/badge/platform-PlatformIO-orange.svg)
+![Language](https://img.shields.io/badge/language-C/C++-green.svg)
 [![Platform](https://img.shields.io/badge/platform-PlatformIO-orange.svg)](https://platformio.org/)
 [![Language](https://img.shields.io/badge/language-C/C++-green.svg)](https://isocpp.org/)
 
@@ -38,7 +40,10 @@ This project aims to provide a **low-cost, transparent, modular, and IoT-ready s
 | **Power Supply**            | 5V regulated                                      | 1   |
 
 ### Hardware Connections Diagram
+### Hardware Connections Diagram
 
+![HARDWARE WIRING DIAGRAM](lib/img/diagram.png)
+*Figure 1: Complete hardware wiring setup for the project*
 ![HARDWARE WIRING DIAGRAM](img/diagram.png)
 
 ---
