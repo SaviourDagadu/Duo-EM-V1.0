@@ -40,11 +40,9 @@ This project aims to provide a **low-cost, transparent, modular, and IoT-ready s
 | **Power Supply**            | 5V regulated                                      | 1   |
 
 ### Hardware Connections Diagram
-### Hardware Connections Diagram
 
-![HARDWARE WIRING DIAGRAM](lib/img/diagram.png)
+![HARDWARE WIRING DIAGRAM](img/diagram.jpg)
 *Figure 1: Complete hardware wiring setup for the project*
-![HARDWARE WIRING DIAGRAM](img/diagram.png)
 
 ---
 
