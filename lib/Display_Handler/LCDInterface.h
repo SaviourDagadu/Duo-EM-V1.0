@@ -14,6 +14,7 @@ public:
     void nextPage();
     void showSystemMessage(const String& message, unsigned long duration = 2000);
     void showAlert(const String& message);
+    void backLightMode();
 
 private:
     LiquidCrystal_I2C lcd;
@@ -32,4 +33,4 @@ private:
     String formatFloat(float value, int precision);
 };
 
-#endif
+#endif // LCDINTERFACE_H
