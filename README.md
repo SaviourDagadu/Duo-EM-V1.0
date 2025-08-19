@@ -37,9 +37,10 @@ This project aims to provide a **low-cost,transparent, modular, and IoT-ready so
 | **LCD Display**             | Local data visualization                          | 1   |
 | **Power Supply**            | 5V regulated                                      | 1   |
 
-### Hardware Connections diagram
+### Hardware Connections Diagram
 
 ![HARDWARE WIRING DIAGRAM](lib/img/diagram.png)
+*Figure 1: Complete hardware wiring setup for the project*
 
 ---
 
