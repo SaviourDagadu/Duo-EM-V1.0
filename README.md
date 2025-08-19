@@ -3,9 +3,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Platform](https://img.shields.io/badge/platform-PlatformIO-orange.svg)
 ![Language](https://img.shields.io/badge/language-C/C++-green.svg)
-[![Platform](https://img.shields.io/badge/platform-PlatformIO-orange.svg)](https://platformio.org/)
-[![Language](https://img.shields.io/badge/language-C/C++-green.svg)](https://isocpp.org/)
-
 ## 📌 Overview
 
 The **Duo Energy Monitoring System** is an **ESP32-based** solution designed to measure, monitor, and analyze the energy consumption of connected electrical devices in **real-time**.  
