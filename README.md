@@ -39,7 +39,7 @@ This project aims to provide a **low-cost,transparent, modular, and IoT-ready so
 
 ### Hardware Connections diagram
 
-<img src="lib/img/hardware diagram.png" alt="HARDWARE WIRING DIAGRAM" width="200" align="center" style="margin-right: 1310px; margin-bottom: 882px;"/>
+![HARDWARE WIRING DIAGRAM](lib/img/diagram.png)
 
 ---
 
