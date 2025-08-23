@@ -440,7 +440,7 @@ void runComprehensiveDiagnostics() {
 
 // User Interaction Simulation Functions
 void simulateUserSMS(const String& command) {
-  Serial.println("📱 Simulating SMS from user: '" + command + "'");
+  Serial.println(" Simulating SMS from user: '" + command + "'");
   
   GSMModule::SMSCommand cmd = gsmModule.parseSMSCommand(command, SMS_RECIPIENTS[0]);
   

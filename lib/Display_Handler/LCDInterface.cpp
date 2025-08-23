@@ -387,3 +387,4 @@ void LCDInterface::backLightMode(){
      else{
         lcd.backlight();
      }
+}

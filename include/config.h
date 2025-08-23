@@ -99,9 +99,9 @@
 
 // SMS Configuration
 static const char* const SMS_RECIPIENTS[] = {
-    "+233248919044",    // First recipient (Tenant_A)
+    "+233205324322",    // First recipient (Tenant_A)
     "+233245829456",    // Second recipient (Tenant_B)
-    "+2335202045221"     // Emergency contact (LandLord)
+    "+233524919044"     // Emergency contact (LandLord)
 };
 #define SMS_RECIPIENT_COUNT (sizeof(SMS_RECIPIENTS) / sizeof(SMS_RECIPIENTS[0]))
 
@@ -134,7 +134,7 @@ static const char* const SMS_RECIPIENTS[] = {
 // Tenant A (Unit A) Configuration
 #define PZEM_A_TX_PIN          26
 #define PZEM_A_RX_PIN          27
-#define PZEM_A_ADDRESS         0x02
+#define PZEM_A_ADDRESS         0x01
 #define PZEM_A_SOFTWARE_SERIAL true    // Using SoftwareSerial
 
 // Tenant B (Unit B) Configuration  
@@ -153,7 +153,7 @@ static const char* const SMS_RECIPIENTS[] = {
 // ===================================
 #define DAILY_ENERGY_THRESHOLD 25.0    // kWh per day limit
 #define DAILY_COST_THRESHOLD 15.00     // Cost limit (in your currency)
-#define ENERGY_COST_PER_KWH 0.60       // Cost per kWh (adjust for your rate)
+#define ENERGY_COST_PER_KWH 1.60       // Cost per kWh (adjust for your rate)
 
 // Alert Hysteresis (to prevent alert flapping)
 #define ALERT_HYSTERESIS_PERCENT 10    // 10% below threshold to clear alert
